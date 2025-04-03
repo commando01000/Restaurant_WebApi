@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository.Layer;
 using Repository.Layer.Interfaces;
 using Service.Layer.Restaurants;
+using Service.Layer.Restaurants.Profiles;
 using System;
 
 namespace Restaurant_WebApi.Extensions
@@ -16,6 +17,9 @@ namespace Restaurant_WebApi.Extensions
             services.AddScoped(typeof(IUnitOfWork<RestaurantDBContext>), typeof(UnitOfWork<RestaurantDBContext>));
 
             services.AddScoped<IRestaurantService, RestaurantService>();
+
+            // Register the auto mapper
+            services.AddAutoMapper(typeof(RestaurantsProfile));
 
             return services;
         }

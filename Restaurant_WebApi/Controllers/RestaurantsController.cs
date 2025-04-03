@@ -1,5 +1,6 @@
 ﻿using Common.Layer;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Layer.RestaurantSpecs;
 using Service.Layer.Restaurants;
 using Service.Layer.ViewModels;
 
@@ -25,11 +26,28 @@ namespace Restaurant_WebApi.Controllers
             return Ok(restaurants);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllWithSpecs([FromQuery] RestaurantSpecification specs)
+        {
+            var restaurants = await _restaurantService.GetRestaurantsWithSpecs(specs);
+
+            return Ok(restaurants);
+        }
+
         // GET api/<RestaurantsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            return "value";
+            var restaurant = await _restaurantService.GetRestaurantById(id);
+            return Ok(restaurant);
+        }
+
+        // GET api/<RestaurantsController>/5
+        [HttpGet]
+        public async Task<IActionResult> GetWithSpecs([FromQuery] RestaurantSpecification specs)
+        {
+            var restaurant = await _restaurantService.GetRestaurantWithSpecs(specs);
+            return Ok(restaurant);
         }
 
         // POST api/<RestaurantsController>

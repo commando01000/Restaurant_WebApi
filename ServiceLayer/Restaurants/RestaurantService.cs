@@ -1,11 +1,14 @@
-﻿using Common.Layer;
+﻿using AutoMapper;
+using Common.Layer;
 using Data.Layer.Contexts;
 using Domain.Layer.Entities;
 using Repository.Layer.Interfaces;
+using Repository.Layer.RestaurantSpecs;
 using Service.Layer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +17,12 @@ namespace Service.Layer.Restaurants
     public class RestaurantService : IRestaurantService
     {
         private readonly IUnitOfWork<RestaurantDBContext> _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public RestaurantService(IUnitOfWork<RestaurantDBContext> unitOfWork)
+        public RestaurantService(IUnitOfWork<RestaurantDBContext> unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public Response AddRestaurant(RestaurantVM restaurant)
@@ -30,29 +35,97 @@ namespace Service.Layer.Restaurants
             throw new NotImplementedException();
         }
 
-        public Task<Response<RestaurantVM>> GetRestaurantById(int id)
+        public async Task<Response<RestaurantVM>> GetRestaurantById(Guid id)
         {
-            throw new NotImplementedException();
+            var restaurant = await _unitOfWork.Repository<Restaurant, Guid>().GetById(id);
+
+            var MappedRestaurant = new RestaurantVM()
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Description = restaurant.Description,
+                Email = restaurant.Email,
+                Street = restaurant.Address.Street,
+                Zipcode = restaurant.Address.ZipCode,
+                HasDelivery = restaurant.HasDelivery,
+                PhoneNumber = restaurant.PhoneNumber,
+                Dishes = restaurant.Dishes.Select(dish => new DishVM()
+                {
+                    Id = dish.Id,
+                    Name = dish.Name,
+                    Description = dish.Description,
+                    Price = dish.Price,
+                    RestaurantId = dish.RestaurantId,
+                }).ToList()
+            };
+
+            var response = new Response<RestaurantVM>();
+            response.Data = MappedRestaurant;
+            response.Status = true;
+            response.Message = "Success";
+
+            return response;
         }
 
         public async Task<Response<List<RestaurantVM>>> GetRestaurants()
         {
             var restaurants = await _unitOfWork.Repository<Restaurant, Guid>().GetAllAsNoTracking();
 
-            var MappedRestaurants = restaurants.Select(res => new RestaurantVM()
-            {
-                Id = res.Id,
-                Name = res.Name,
-                Description = res.Description,
-                Email = res.Email,
-                Address = res.Address,
-                HasDelivery = res.HasDelivery,
-                PhoneNumber = res.PhoneNumber,
-                Dishes = res.Dishes
-            }).ToList();
+            var MappedRestaurants = _mapper.Map<List<RestaurantVM>>(restaurants);
 
             var response = new Response<List<RestaurantVM>>();
             response.Data = MappedRestaurants;
+            response.Status = true;
+            response.Message = "Success";
+
+            return response;
+        }
+
+        public async Task<Response<List<RestaurantVM>>> GetRestaurantsWithSpecs(RestaurantSpecification spec)
+        {
+            var RestaurantsSpecs = new RestaurantWithSpecification(spec);
+            var restaurants = await _unitOfWork.Repository<Restaurant, Guid>().GetAllWithSpecs(RestaurantsSpecs);
+
+            var MappedRestaurants = _mapper.Map<List<RestaurantVM>>(restaurants);
+
+            var response = new Response<List<RestaurantVM>>();
+            response.Data = MappedRestaurants;
+            response.Status = true;
+            response.Message = "Success";
+
+            return response;
+        }
+
+        public async Task<Response<RestaurantVM>> GetRestaurantWithSpecs(RestaurantSpecification spec)
+        {
+            var RestaurantSpecs = new RestaurantWithSpecification(Guid.Parse(spec.Id));
+
+            var restaurant = await _unitOfWork.Repository<Restaurant, Guid>().GetWithSpecs(RestaurantSpecs);
+
+            var MappedRestaurant = new RestaurantVM()
+            {
+                Id = restaurant.Id,
+                Name = restaurant.Name,
+                Description = restaurant.Description,
+                Email = restaurant.Email,
+                Street = restaurant.Address.Street,
+                City = restaurant.Address.City,
+                State = restaurant.Address.State,
+                Zipcode = restaurant.Address.ZipCode,
+                HasDelivery = restaurant.HasDelivery,
+                PhoneNumber = restaurant.PhoneNumber,
+                Dishes = restaurant.Dishes.Select(dish => new DishVM()
+                {
+                    Id = dish.Id,
+                    Name = dish.Name,
+                    Description = dish.Description,
+                    Price = dish.Price,
+                    RestaurantId = dish.RestaurantId,
+                }).ToList()
+            };
+
+            var response = new Response<RestaurantVM>();
+            response.Data = MappedRestaurant;
             response.Status = true;
             response.Message = "Success";
 
