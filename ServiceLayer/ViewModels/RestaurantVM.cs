@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Domain.Layer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Layer.Entities
+namespace Service.Layer.ViewModels
 {
-    public class Restaurant
+    public class RestaurantVM
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }

@@ -13,10 +13,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="System.Linq.Async" Version="6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ServiceLayer\Service.Layer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Base.Repository">
+      <HintPath>..\..\Base.Repository\Base.Repository\bin\Debug\net8.0\Base.Repository.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
