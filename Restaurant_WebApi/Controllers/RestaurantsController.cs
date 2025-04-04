@@ -34,6 +34,14 @@ namespace Restaurant_WebApi.Controllers
             return Ok(restaurants);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAllPaginatedWithSpecs([FromQuery] RestaurantSpecificationWithPagination specs)
+        {
+            var restaurants = await _restaurantService.GetRestaurantsPaginatedWithSpecs(specs);
+
+            return Ok(restaurants);
+        }
+
         // GET api/<RestaurantsController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(Guid id)

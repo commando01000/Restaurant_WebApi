@@ -4,6 +4,7 @@ using Data.Layer.Contexts;
 using Domain.Layer.Entities;
 using Repository.Layer.Interfaces;
 using Repository.Layer.RestaurantSpecs;
+using Service.Layer.DTOs.Pagination;
 using Service.Layer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -126,6 +127,24 @@ namespace Service.Layer.Restaurants
 
             var response = new Response<RestaurantVM>();
             response.Data = MappedRestaurant;
+            response.Status = true;
+            response.Message = "Success";
+
+            return response;
+        }
+
+        public async Task<Response<PaginatedResultDto<RestaurantVM>>> GetRestaurantsPaginatedWithSpecs(RestaurantSpecificationWithPagination spec)
+        {
+            var RestaurantsSpecs = new RestaurantWithSpecification(spec);
+            var restaurants = await _unitOfWork.Repository<Restaurant, Guid>().GetAllWithSpecs(RestaurantsSpecs);
+
+            var MappedRestaurants = _mapper.Map<List<RestaurantVM>>(restaurants);
+
+            var RestrauntsCount = await _unitOfWork.Repository<Restaurant, Guid>().GetCountAsync(RestaurantsSpecs);
+
+            var response = new Response<PaginatedResultDto<RestaurantVM>>();
+
+            response.Data = new PaginatedResultDto<RestaurantVM>(RestrauntsCount, spec.PageIndex, spec.PageSize, MappedRestaurants);
             response.Status = true;
             response.Message = "Success";
 

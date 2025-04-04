@@ -1,5 +1,6 @@
 ﻿using Common.Layer;
 using Repository.Layer.RestaurantSpecs;
+using Service.Layer.DTOs.Pagination;
 using Service.Layer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Service.Layer.Restaurants
         Task<Response<RestaurantVM>> GetRestaurantWithSpecs(RestaurantSpecification spec);
 
         Task<Response<RestaurantVM>> GetRestaurantById(Guid id);
+        Task<Response<PaginatedResultDto<RestaurantVM>>> GetRestaurantsPaginatedWithSpecs(RestaurantSpecificationWithPagination spec);
         Response AddRestaurant(RestaurantVM restaurant);
         Response UpdateRestaurant(RestaurantVM restaurant);
         Response DeleteRestaurant(int id);
