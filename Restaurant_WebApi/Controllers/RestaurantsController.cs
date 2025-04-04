@@ -1,6 +1,7 @@
 ﻿using Common.Layer;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Layer.RestaurantSpecs;
+using Service.Layer.DTOs.Restaurants;
 using Service.Layer.Restaurants;
 using Service.Layer.ViewModels;
 
@@ -60,8 +61,15 @@ namespace Restaurant_WebApi.Controllers
 
         // POST api/<RestaurantsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] CreateRestaurantDto createRestaurantDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _restaurantService.CreateRestaurant(createRestaurantDto);
+            return CreatedAtAction(nameof(Get), new { id = result.Id }, result);
         }
 
         // PUT api/<RestaurantsController>/5

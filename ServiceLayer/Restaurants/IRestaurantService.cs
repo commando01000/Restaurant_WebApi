@@ -1,7 +1,7 @@
 ﻿using Common.Layer;
 using Repository.Layer.RestaurantSpecs;
 using Service.Layer.DTOs.Pagination;
-using Service.Layer.ViewModels;
+using Service.Layer.DTOs.Restaurants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,14 +12,14 @@ namespace Service.Layer.Restaurants
 {
     public interface IRestaurantService
     {
-        Task<Response<List<RestaurantVM>>> GetRestaurants();
-        Task<Response<List<RestaurantVM>>> GetRestaurantsWithSpecs(RestaurantSpecification spec);
-        Task<Response<RestaurantVM>> GetRestaurantWithSpecs(RestaurantSpecification spec);
+        Task<Response<List<RestaurantDto>>> GetRestaurants();
+        Task<Response<List<RestaurantDto>>> GetRestaurantsWithSpecs(RestaurantSpecification spec);
+        Task<Response<RestaurantDto>> GetRestaurantWithSpecs(RestaurantSpecification spec);
 
-        Task<Response<RestaurantVM>> GetRestaurantById(Guid id);
-        Task<Response<PaginatedResultDto<RestaurantVM>>> GetRestaurantsPaginatedWithSpecs(RestaurantSpecificationWithPagination spec);
-        Response AddRestaurant(RestaurantVM restaurant);
-        Response UpdateRestaurant(RestaurantVM restaurant);
-        Response DeleteRestaurant(int id);
+        Task<Response<RestaurantDto>> GetRestaurantById(Guid id);
+        Task<Response<PaginatedResultDto<RestaurantDto>>> GetRestaurantsPaginatedWithSpecs(RestaurantSpecificationWithPagination spec);
+        Task<Response> CreateRestaurant(CreateRestaurantDto restaurant);
+        Response UpdateRestaurant(RestaurantDto restaurant);
+        Response DeleteRestaurant(Guid id);
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Service.Layer.ViewModels
 {
-    public class DishVM
+    public class DishDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
