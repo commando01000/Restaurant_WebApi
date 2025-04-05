@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Layer;
 using Domain.Layer.Entities;
+using Service.Layer.Commands;
 using Service.Layer.DTOs.Restaurants;
 using Service.Layer.ViewModels;
 using System;
@@ -37,6 +38,21 @@ namespace Service.Layer.Restaurants.Profiles
                 }))
                 // Map List<DishVM> to List<Dish>
                 .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.Dishes));
+
+
+            // Map RestaurantVM to Restaurant
+            CreateMap<CreateRestaurantCommand, Restaurant>()
+                // Map Street and Zipcode back to an Address object
+                .ForMember(dest => dest.Address, opt => opt.MapFrom(src => new Address
+                {
+                    Street = src.Street,
+                    ZipCode = src.ZipCode,
+                    City = src.City,
+                    State = src.State
+                }))
+                // Map List<DishVM> to List<Dish>
+                .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.Dishes));
+
 
             // Map Dish to DishVM (for the Dishes collection)
             CreateMap<Dish, DishDto>().ReverseMap();

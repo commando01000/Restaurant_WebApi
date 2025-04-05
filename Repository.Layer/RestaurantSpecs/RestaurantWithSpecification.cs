@@ -48,7 +48,7 @@ namespace Repository.Layer.RestaurantSpecs
             )
         {
             AddInclude(res => res.Dishes);
-
+            ApplyPaging(spec.PageSize * (spec.PageIndex - 1), spec.PageSize); // Apply pagination
             // Apply sorting
             if (!string.IsNullOrEmpty(spec.Sort))
             {

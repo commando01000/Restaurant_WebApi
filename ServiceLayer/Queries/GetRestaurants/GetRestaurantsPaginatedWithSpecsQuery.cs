@@ -1,13 +1,18 @@
-﻿using System;
+﻿using Common.Layer;
+using MediatR;
+using Service.Layer.DTOs.Pagination;
+using Service.Layer.DTOs.Restaurants;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Layer.RestaurantSpecs
+namespace Service.Layer.Queries.GetRestaurants
 {
-    public class RestaurantSpecificationWithPagination
+    public class GetRestaurantsPaginatedWithSpecsQuery : IRequest<Response<PaginatedResultDto<RestaurantDto>>>
     {
+        public string? Id { get; set; }
         public string? Name { get; set; }
         public bool? HasDelivery { get; set; }
         public string? Email { get; set; }
