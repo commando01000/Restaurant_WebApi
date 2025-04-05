@@ -64,7 +64,12 @@ namespace Service.Layer.Restaurants.Profiles
                 .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Address.State))
                 .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.Dishes)).ReverseMap();
 
-
+            // Map the Create models to the Restaurant entity
+            CreateMap<Restaurant, UpdateRestaurantCommand>().ForMember(dest => dest.Street, opt => opt.MapFrom(src => src.Address.Street))
+                .ForMember(dest => dest.ZipCode, opt => opt.MapFrom(src => src.Address.ZipCode))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.Address.City))
+                .ForMember(dest => dest.State, opt => opt.MapFrom(src => src.Address.State))
+                .ForMember(dest => dest.Dishes, opt => opt.MapFrom(src => src.Dishes)).ReverseMap();
         }
     }
 }

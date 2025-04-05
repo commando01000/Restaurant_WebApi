@@ -8,6 +8,7 @@ using Service.Layer.Queries.GetRestaurant;
 using Service.Layer.Queries.GetRestaurants;
 using Service.Layer.Restaurants;
 using Service.Layer.ViewModels;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -79,16 +80,22 @@ namespace Restaurant_WebApi.Controllers
         }
 
         // PUT api/<RestaurantsController>/5
-        [HttpPut("{id}")]
-        public void Put([FromBody] CreateRestaurantDto createRestaurantDto)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put([FromRoute] Guid Id, [FromBody] UpdateRestaurantCommand command)
         {
+            if (Id != command.Id)
+                return BadRequest("Route ID and body ID do not match.");
 
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
 
-        // DELETE api/<RestaurantsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete([FromRoute] DeleteRestaurantCommand command)
         {
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
+
     }
 }
