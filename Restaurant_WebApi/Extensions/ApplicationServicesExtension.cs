@@ -19,6 +19,8 @@ namespace Restaurant_WebApi.Extensions
 
             services.AddScoped(typeof(IUnitOfWork<RestaurantDBContext>), typeof(UnitOfWork<RestaurantDBContext>));
 
+            services.AddScoped<ExceptionMiddleware>(); // Add the exception middleware>
+
             // Dynamically load assemblies containing handlers
             var assemblies = new[]
             {
