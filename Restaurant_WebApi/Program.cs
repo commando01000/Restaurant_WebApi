@@ -58,6 +58,9 @@ namespace Restaurant_WebApi
 
             app.UseHttpsRedirection();
 
+            // Register the middleware
+            app.UseMiddleware<ExceptionMiddleware>();
+
             app.UseAuthorization();
 
             app.MapControllers();
