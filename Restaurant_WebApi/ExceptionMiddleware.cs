@@ -9,7 +9,7 @@ namespace Restaurant_WebApi
         private readonly ILogger<ExceptionMiddleware> logger;
         private readonly IHostEnvironment hostEnvironment;
 
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, IHostEnvironment hostEnvironment)
+        public ExceptionMiddleware(ILogger<ExceptionMiddleware> logger, IHostEnvironment hostEnvironment)
         {
             this.logger = logger;
             this.hostEnvironment = hostEnvironment;
